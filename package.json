@@ -1,0 +1,23 @@
+{
+  "name": "oa2",
+  "version": "0.1.0",
+  "description": "Trying to get an OAuth2 Server working",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "oauth2",
+    "server",
+    "tutorial"
+  ],
+  "author": "Dr. Amatón",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "oauth2-server": "^3.0.1",
+    "sha3": "^2.1.1",
+    "sqlite3": "^4.1.1"
+  }
+}
