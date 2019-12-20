@@ -1,4 +1,4 @@
-let helpers;
+let helpers = {};
 
 module.exports = (injectedUsersHelper) => {
     helpers.users = injectedUsersHelper;
@@ -27,7 +27,7 @@ function registerUser(req, res) {
             sendResponse(res, message);
 
         } else {
-            helpers.saveUser(username, password, (error) => {
+            helpers.users.saveUser(username, password, (error) => {
                 if (error) {
                     message = error.message;
                 } else {

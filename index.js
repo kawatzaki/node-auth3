@@ -1,6 +1,6 @@
 /* Vendor libraries  */
 const parser = require("body-parser");
-const oauth2 = require("oauth2-server");
+const oauth2 = require("express-oauth-server");
 const express = require("express");
 
 /* User libraries */
@@ -16,13 +16,12 @@ const helpers = {
 const model = require("./authorization/model")(helpers.users, helpers.tokens);
 
 /* Set-Up Express */
-const port = 8080;
+const port = 9001;
 const app = express();
 
 /* Set-Up OAuth2 into the Express app */
-app.oauth2 = oauth2({
+app.oauth2 = new oauth2({
     model,
-    grants: ["password"],
     debug: true
 });
 
@@ -34,7 +33,7 @@ restricted.routes = require("./http/restricted")(
     app,
     restricted.controller
 );
-const auth = { controller: require("./controllers/auth") };
+const auth = { controller: require("./controllers/auth")(helpers.users) };
 auth.routes = require("./http/auth")(
     express.Router(),
     app,
@@ -43,12 +42,10 @@ auth.routes = require("./http/auth")(
 
 /* Register middleware */
 app.use(parser.urlencoded({ extended: true }));
-app.use(app.oauth2.errorHandler());
 app.use("/auth", auth.routes);
 app.use("/restricted", restricted.routes);
 
 /* Start the server */
 app.listen(port, () => {
     console.log(`listening on port: ${port}`);
-})
-
+});

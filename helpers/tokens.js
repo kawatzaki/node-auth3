@@ -15,12 +15,19 @@ module.exports = (injectedDB) => {
  * @param {int} userID ID of the user to use
  * @param {function} closure Function to execute, it'll be called with an error if one exists.
  */
-function saveAccessToken(accessToken, userID, expires, closure) {
+function saveAccessToken(token, client, user, closure) {
     const sql = `
         INSERT OR REPLACE INTO access_tokens (access_token, user_id, expires)
-        VALUES ('${accessToken}', ${userID}, ${expires || 1200});
+        VALUES ('${token.accessToken}', ${user.id}, ${1200});
     `;
-    db.query(sql, closure);
+    db.query(sql, (error) => {
+        closure(error, {
+            accessToken: token.accessToken,
+            accessTokenExpiresAt: token.expires_at,
+            client: {id: client},
+            user: {id: user.id}
+        });
+    });
 }
 
 /**

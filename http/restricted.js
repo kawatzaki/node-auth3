@@ -1,5 +1,5 @@
 module.exports = (router, app, controller) => {
-    router.post("/enter", app.oauth.authorize(), controller.accessRetrictedArea());
+    router.post("/enter", app.oauth2.authorize, controller.accessRestrictedArea);
 
     return router;
 }

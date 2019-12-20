@@ -1,4 +1,4 @@
-let helpers;
+let helpers = {};
 
 module.exports = (injectedUsersHelper, injectedTokensHelper) => {
     helpers.users = injectedUsersHelper;
@@ -6,10 +6,11 @@ module.exports = (injectedUsersHelper, injectedTokensHelper) => {
 
     return {
         getClient,
-        saveAccessToken,
+        saveToken,
         getUser,
         grantTypeAllowed,
-        getAccessToken
+        getAccessToken,
+        saveAuthorizationCode
     };
 };
 
@@ -24,7 +25,9 @@ function getClient(clientID, clientSecret, closure) {
     const client = {
         clientID,
         clientSecret,
-        grants: null,
+        grants: [
+            "password"
+        ],
         redirectUris: null
     }
 
@@ -55,12 +58,11 @@ function getUser(username, password, closure) {
  * Interface to the save token function
  * @param {string} token generated JWT
  * @param {int} clientID ignored client id
- * @param {int} expires time in seconds that the token will last
  * @param {int} user user id
  * @param {function} closure executed on success
  */
-function saveAccessToken(token, clientID, expires, user, closure) {
-    helpers.tokens.saveAccessToken(token, null, expires || 1200, user, closure);
+function saveToken(token, clientID, userID, closure) {
+    helpers.tokens.saveAccessToken(token, clientID, userID || 1200, closure);
 }
 
 /**
@@ -79,4 +81,9 @@ function getAccessToken(bearerToken, closure) {
             });
         }
     });
+}
+
+/* Dummy functions */
+function saveAuthorizationCode(authorizationCode, closure) {
+    // Do stuff
 }
